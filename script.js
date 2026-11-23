@@ -215,6 +215,12 @@ function calcular() {
             '"use strict"; return (' + expressao + ')'
         )();
 
+        if (expressao.includes("/") && !Number.isFinite(resultado)) {
+    alert("Não é possível dividir por zero!");
+    definirVisor("");
+    return;
+}
+
         if (!Number.isFinite(resultado)) {
     throw new Error("Resultado inválido");
 }
