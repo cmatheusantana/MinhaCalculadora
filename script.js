@@ -134,35 +134,45 @@ function posicionarCursor(posicao) {
     selecao.addRange(range);
 }
 
-// Insere um valor respeitando a seleção
-function inserirNoCursor(valor) {
 
+// Insere um valor respeitando a seleção e validando operadores
+function inserirNoCursor(valor) {
     let texto = obterExpressao();
 
-    if (texto === "Erro") {
-        texto = "";
-    }
+    if (texto === "Erro") texto = "";
 
     const [inicio, fim] = obterSelecao();
 
-    const novaExpressao =
-        texto.substring(0, inicio) +
-        valor +
-        texto.substring(fim);
+    const antes = texto.substring(0, inicio);
+    const depois = texto.substring(fim);
+
+    const novaExpressao = antes + valor + depois;
+    const operadores = "+-*/";
+
+    // Verifica toda a expressão, inclusive valores colados
+    for (let i = 1; i < novaExpressao.length; i++) {
+        const anterior = novaExpressao[i - 1];
+        const atual = novaExpressao[i];
+
+        if (
+            operadores.includes(anterior) &&
+            operadores.includes(atual)
+        ) {
+            // Permite números negativos após +, * e /
+            if (atual === "-" && anterior !== "-") {
+                continue;
+            }
+
+            return;
+        }
+    }
 
     definirVisor(novaExpressao, inicio + valor.length);
 }
 
 // Adiciona números e operadores pelo botão
 function adicionar(valor) {
-
-    let texto = obterExpressao();
-
-    if (texto === "Erro") {
-        texto = "";
-    }
-
-    definirVisor(texto + valor);
+    inserirNoCursor(valor);
 }
 
 // Limpa o visor
