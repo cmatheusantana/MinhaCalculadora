@@ -216,14 +216,15 @@ function calcular() {
         )();
 
         if (!Number.isFinite(resultado)) {
-            throw new Error("Resultado inválido");
-        }
+    throw new Error("Resultado inválido");
+}
 
+const resultadoFinal = Number(resultado.toFixed(10));
         // Registra a operação no histórico
-        historico.unshift({
-            conta: expressao,
-            resultado: resultado
-        });
+historico.unshift({
+    conta: expressao,
+    resultado: resultadoFinal
+});
 
         // Mantém somente as 10 últimas operações
         historico = historico.slice(0, 10);
@@ -237,7 +238,7 @@ function calcular() {
         atualizarHistorico();
 
         // Mostra o resultado
-        definirVisor(String(resultado));
+        definirVisor(String(resultadoFinal));
 
     } catch {
         definirVisor("Erro");
