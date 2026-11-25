@@ -84,6 +84,9 @@ h2 {
     cursor: pointer;
     transition: all 0.15s ease;
 }
+.botoes .parentese {
+    grid-column: span 2;
+}
 
 .botoes button:hover {
     background-color: #5A5E65;
