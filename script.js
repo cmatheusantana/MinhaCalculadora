@@ -24,29 +24,11 @@ function classeSimbolo(simbolo) {
 }
 
 // Exibe uma expressão com os símbolos coloridos
+
 function aplicarCores(elemento, texto) {
     const visual = texto.replaceAll("*", "×").replaceAll("/", "÷");
 
-    elemento.innerHTML = "";
-
-    for (const caractere of visual) {
-        const classe = classeSimbolo(
-            caractere === "×" ? "*" :
-            caractere === "÷" ? "/" :
-            caractere
-        );
-
-        if (classe) {
-            const span = document.createElement("span");
-            span.className = classe;
-            span.textContent = caractere;
-            elemento.appendChild(span);
-        } else {
-            elemento.appendChild(
-                document.createTextNode(caractere)
-            );
-        }
-    }
+    elemento.textContent = visual;
 }
 
 // Recupera a expressão em formato matemático
@@ -122,20 +104,55 @@ function apagar() {
     definirVisor(texto.slice(0, -1));
 }
 
+function prepararPorcentagem(expressao) {
+    return expressao.replace(
+        /(\d+(?:\.\d+)?)%/g,
+        function(match, numero, indice) {
+            const anterior = expressao.slice(0, indice);
+            const operador = anterior.trim().slice(-1);
+
+            // Porcentagem em adição ou subtração
+            if (operador === "+" || operador === "-") {
+                const base = anterior.slice(
+                    0,
+                    anterior.lastIndexOf(operador)
+                ).trim();
+
+                if (base) {
+                    return `(${base}*${numero}/100)`;
+                }
+            }
+
+            // Porcentagem isolada, multiplicação ou divisão
+            return `(${numero}/100)`;
+        }
+    );
+}
+
+function prepararRaiz(expressao) {
+    return expressao.replace(
+        /√(\d+(?:\.\d+)?|\([^()]*\))/g,
+        "Math.sqrt($1)"
+    );
+}
+
 // Realiza o cálculo
 function calcular() {
     try {
         const expressao = obterExpressao();
 
-        if (
+         if (
             !expressao ||
-            !/^[0-9+\-*/.() ]+$/.test(expressao)
+            !/^[0-9+\-*/.%() √]+$/.test(expressao)
         ) {
             throw new Error("Expressão inválida");
         }
 
+        const expressaoComPorcentagem = prepararPorcentagem(expressao);
+        const expressaoConvertida = prepararRaiz(expressaoComPorcentagem);
+
         const resultado = Function(
-            '"use strict"; return (' + expressao + ')'
+            '"use strict"; return (' + expressaoConvertida + ')'
         )();
 
         if (
@@ -313,7 +330,7 @@ document.addEventListener("keydown", async function(event) {
             return;
         }
 
-        if (/^[0-9+\-*/().]$/.test(tecla)) {
+        if (/^[0-9+\-*/().%]$/.test(tecla)) {
             event.preventDefault();
             adicionar(tecla);
             return;
@@ -338,7 +355,7 @@ document.addEventListener("keydown", async function(event) {
     }
 
     // Atalhos quando o visor não está selecionado
-    if (/^[0-9+\-*/().]$/.test(tecla)) {
+    if (/^[0-9+\-*/().%]$/.test(tecla)) {
         adicionar(tecla);
     } else if (tecla === ",") {
         adicionar(".");

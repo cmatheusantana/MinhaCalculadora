@@ -15,14 +15,17 @@
 
             <div id="visor" contenteditable="true" spellcheck="false"></div>
 
+                        
             <div class="botoes">
                 <button class="limpar" onclick="limpar()">C</button>
                 <button onclick="apagar()">⌫</button>
                 <button class="operador-divisao" onclick="adicionar('/')">÷</button>
                 <button class="operador-multiplicacao" onclick="adicionar('*')">×</button>
 
-                 <button class="parentese" onclick="adicionar('(')">(</button>
-                 <button class="parentese" onclick="adicionar(')')">)</button>
+                <button class="porcentagem" onclick="adicionar('%')">%</button>
+                <button class="parentese" onclick="adicionar('(')">(</button>
+                <button class="parentese" onclick="adicionar(')')">)</button>
+                <button class="raiz" onclick="adicionar('√')">√</button>
 
                 <button onclick="adicionar('7')">7</button>
                 <button onclick="adicionar('8')">8</button>
@@ -42,6 +45,7 @@
                 <button class="zero" onclick="adicionar('0')">0</button>
                 <button onclick="adicionar('.')">.</button>
             </div>
+
         </div>
 
         <div class="historico">

@@ -48,26 +48,6 @@ h2 {
     outline: none;
 }
 
-.simbolo-adicao {
-    color: #5024B5;
-    -webkit-text-fill-color: currentColor;
-}
-
-.simbolo-subtracao {
-    color: #D97735;
-    -webkit-text-fill-color: currentColor;
-}
-
-.simbolo-multiplicacao {
-    color: #269B78;
-    -webkit-text-fill-color: currentColor;
-}
-
-.simbolo-divisao {
-    color: #895BC5;
-    -webkit-text-fill-color: currentColor;
-}
-
 .botoes {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -84,8 +64,11 @@ h2 {
     cursor: pointer;
     transition: all 0.15s ease;
 }
-.botoes .parentese {
-    grid-column: span 2;
+
+.botoes .parentese,
+.botoes .porcentagem,
+.botoes .raiz {
+    grid-column: span 1;
 }
 
 .botoes button:hover {
